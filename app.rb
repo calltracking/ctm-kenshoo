@@ -11,7 +11,6 @@ require 'uri'
 get the clickid from the Landing URL 
 k_clickid
 
-# kenshoo: https://148.xg4ken.com/media/redir.php?track=1&token=4cc651ab-d9bb-4c1f-a47b-8cfa5df6d150&type=call&val=24.60&orderId=&promoCode=&valueCurrency=USD&GCID=&kw=&product=
 =end
 class KenshooApp < Sinatra::Base
 
@@ -44,6 +43,7 @@ class KenshooApp < Sinatra::Base
     post_data = request.body.read#env["rack.input"].read
     verify = Base64.encode64(OpenSSL::HMAC.digest(digest, ENV['CTM_SECRET'], request_time + post_data)).strip
     if verify != request_sig
+      puts "request not verified invalid request"
       return nil
     end
     JSON.parse(post_data)
