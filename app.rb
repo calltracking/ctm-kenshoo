@@ -4,6 +4,7 @@ require 'base64'
 require 'json'
 require 'curb'
 require 'uri'
+KENSHOO_TOKEN=ENV['KENSHOO_TOKEN']
 
 # handle an incoming ctm webhook request and forward to kenshoo as a tracking event
 =begin
@@ -27,7 +28,7 @@ class KenshooApp < Sinatra::Base
     gclid = params['gclid']
     search_keywords = params['search']
     search_keywords = URI.escape(search_keywords) if search_keywords
-    url = "https://148.xg4ken.com/media/redir.php?track=1&token=#{k_clickid}&type=call&val=#{call['duration']}&orderId=#{call['id']}&promoCode=&valueCurrency=USD&GCID=#{gclid}&kw=#{search_keywords}&product="
+    url = "https://148.xg4ken.com/media/redir.php?track=1&token=#{KENSHOO_TOKEN}&GCID=#{k_clickid}&type=call&val=#{call['duration']}&orderId=#{call['id']}&promoCode=&valueCurrency=USD&kw=#{search_keywords}&product="
     puts "send pixel request: #{url}"
     r = Curl.get(url)
     puts r.header_str
