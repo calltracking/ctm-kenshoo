@@ -33,7 +33,9 @@ class KenshooApp < Sinatra::Base
     url = "https://148.xg4ken.com/media/redir.php?track=1&token=#{KENSHOO_TOKEN}&GCID=#{k_clickid}&k_clickid=#{k_clickid}&kmed=ppc&type=call&val=#{KENSHOO_CALL_VALUE}&orderId=#{call['id']}&promoCode=&valueCurrency=USD&kw=#{search_keywords}&product="
     url += "&ref=#{ref}" if ref
     puts "send pixel request: #{url}"
-    r = Curl.get(url)
+    r = Curl.get(url) do|http|
+      http.headers['Referer'] = call['location'].to_s
+    end
     puts r.header_str
     puts r.body_str
     [201, {'Content-Type' => 'text/json'}, nil]
